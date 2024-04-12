@@ -19,8 +19,8 @@ class StorageService {
   async downloadFile({ url }) {
     this.storageRef = ref(storage, url);
     return await getDownloadURL(this.storageRef)
-      .then((url) => {
-        return url;
+      .then((imageUrl) => {
+        return imageUrl;
       })
       .catch((error) => {
         console.log("downloadFile error: " + error);

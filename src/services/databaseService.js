@@ -1,5 +1,11 @@
 import { db } from "./firebaseApp";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+} from "firebase/firestore";
 
 class DatabaseService {
   dbCollection;
@@ -21,14 +27,14 @@ class DatabaseService {
     this.dbCollection = collection(db, collectionPath);
 
     try {
-      const querySnapshot = await getDocs(this.dbCollection);
-      const data = [];
+      const q = query(this.dbCollection, orderBy("date", "desc"));
+      const querySnapshot = await getDocs(q);
+      const docs = [];
       querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data()}`);
-        data.push(doc.data);
+        docs.push({ data: doc.data(), id: doc.id });
       });
 
-      return data;
+      return docs;
     } catch (error) {
       console.log("getAllData error: " + error);
       throw error;

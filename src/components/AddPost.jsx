@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import image from "../assets/react.svg";
-import { Camera, Plus, ChevronRight, Trash2 } from "lucide-react";
+import { Camera, Plus, ChevronRight, Trash2, Smile } from "lucide-react";
 import storageService from "../services/storageService";
 import { useSelector } from "react-redux";
 import databaseService from "../services/databaseService";
+import EmojiPicker from "emoji-picker-react";
+import toast, { Toaster } from "react-hot-toast";
+import { TailSpin } from "react-loader-spinner";
 
-function AddPost() {
+function AddPost({ updateSharedData }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [content, setContent] = useState("");
+  const [emoji, setEmoji] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const uid = useSelector((state) => state.auth.userData.uid);
+  const name = useSelector((state) => state.auth.userData.name);
 
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
@@ -24,7 +30,12 @@ function AddPost() {
     setContent(e.target.value);
   };
 
+  const handleEmojiClick = (emoji) => {
+    setContent(content.concat(emoji.emoji));
+  };
+
   const handleShare = async () => {
+    setSaving(true);
     if (selectedImage && content) {
       const url = await storageService.uploadFile({
         path: "post_images/" + Date.now(),
@@ -35,25 +46,38 @@ function AddPost() {
         content: content,
         imageUrl: url,
         userId: uid,
+        username: name,
+        date: Date.now(),
       };
 
       const docRef = await databaseService.uploadData({
         collectionPath: "posts",
         data,
       });
-      if (docRef) alert("Post saved successfully");
+      if (docRef) {
+        toast.success("Post shared successfully !");
+        setContent("");
+        setSelectedImage(null);
+        setEmoji(false);
+        updateSharedData(url); // for triggering rerender of AllPosts and passing a unique data(url) to make the state change whenever there is new post posted
+      }
 
       // for downloading the image url
       // if (url) {
       //   const downloadUrl = await storageService.downloadFile({ url });
       //   if (downloadUrl) console.log("downloadUrl: " + downloadUrl);
       // }
-    }
+    } else toast.error("Write some text and add image !");
+    setSaving(false);
   };
 
   return (
-    <div className="p-8 w-[720px] bg-white rounded-xl flex flex-col gap-5 duration-300">
-      <div className="flex gap-5 items-start">
+    <div
+      id="addPostContainer"
+      className="p-8 w-[720px] bg-white rounded-xl flex flex-col gap-5 duration-300 border-2 border-transparent"
+    >
+      <Toaster position="top-center" reverseOrder={false} />
+      <div className="flex gap-5 items-start relative">
         <img src={image} height={32} width={32} alt="image" />
         <textarea
           className="outline-none flex-1 h-24 resize-none"
@@ -62,6 +86,19 @@ function AddPost() {
           value={content}
           onChange={handleContentChange}
         ></textarea>
+        <Smile
+          color={"gray"}
+          size={40}
+          className="hover:bg-neutral-100 active:bg-neutral-200 p-2 rounded-full"
+          onClick={() => setEmoji(!emoji)}
+        />
+        <EmojiPicker
+          open={emoji}
+          lazyLoadEmojis={true}
+          reactionsDefaultOpen={true}
+          style={{ position: "absolute", right: "48px" }}
+          onEmojiClick={handleEmojiClick}
+        />
       </div>
 
       {/*TODO: Add Image here if added by user */}
@@ -101,13 +138,24 @@ function AddPost() {
           </button>
         </div>
 
-        <button
-          className="py-3 px-4 rounded-md bg-primary text-white w-fit items-center flex gap-3 font-medium"
-          onClick={handleShare}
-        >
-          Share
-          <ChevronRight color={"white"} size={20} />
-        </button>
+        <div className="flex gap-5 items-center">
+          <TailSpin
+            visible={saving}
+            height="32"
+            width="32"
+            color="#666BED"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            strokeWidth={4}
+          />
+          <button
+            className="py-3 px-4 rounded-md bg-primary text-white w-fit items-center flex gap-3 font-medium"
+            onClick={handleShare}
+          >
+            Share
+            <ChevronRight color={"white"} size={20} />
+          </button>
+        </div>
       </div>
     </div>
   );

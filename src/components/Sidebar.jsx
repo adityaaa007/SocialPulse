@@ -7,6 +7,7 @@ import { logout } from "../features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import Logo from "./Logo";
 import logo from "../assets/dashboard_logo_white.jpg";
+import authService from "../services/authService";
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -95,7 +96,10 @@ const Sidebar = () => {
 
         {/* Logout button */}
         <a
-          onClick={() => dispatch(logout())}
+          onClick={async () => {
+            dispatch(logout());
+            await authService.logout();
+          }}
           href="#"
           className={`flex gap-3 py-[10px] px-[10px] border-2 border-white/50 rounded-lg hover:bg-white/10 ${
             isExpanded ? "w-full justify-start" : "w-auto justify-center"
