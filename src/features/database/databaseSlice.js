@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-  userDbData: {},
+  userDbData: {
+    likedPosts:[]
+  },
 };
 
 const databaseSlice = createSlice({
