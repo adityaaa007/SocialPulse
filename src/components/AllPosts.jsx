@@ -4,7 +4,6 @@ import Post from "./Post";
 
 function AllPosts({ sharedData }) {
   const [posts, setPosts] = useState([]);
-  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const getAllPosts = async () => {
@@ -19,7 +18,6 @@ function AllPosts({ sharedData }) {
 
     getAllPosts();
 
-    console.log("allposts component rendered...");
   }, [sharedData]);
 
   return (

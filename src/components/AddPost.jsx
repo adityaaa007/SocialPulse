@@ -48,6 +48,7 @@ function AddPost({ updateSharedData }) {
         userId: uid,
         username: name,
         date: Date.now(),
+        likes: 0,
       };
 
       const docRef = await databaseService.uploadData({

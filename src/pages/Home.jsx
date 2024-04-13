@@ -1,11 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import AddPost from "../components/AddPost";
 import Searchbar from "../components/Searchbar";
 import AllPosts from "../components/AllPosts";
+import { useSelector, useDispatch } from "react-redux";
+import databaseService from "../services/databaseService";
+import { updateData } from "../features/database/databaseSlice";
 
 function Home() {
   const [sharedData, setSharedData] = useState("");
+  const uid = useSelector((state) => state.auth.userData.uid);
+  const dispatch = useDispatch();
+
+  const saveUserDbDataCallback = (data) => {
+    // saving userDbData in redux
+    if (data) dispatch(updateData(data));
+  };
+
+  useEffect(() => {
+    // listening for userData(like, etc)
+    let unsubscribe;
+    if (uid) {
+      unsubscribe = databaseService.listenToDocument({
+        documentId: uid,
+        collectionId: "users",
+        callback: saveUserDbDataCallback,
+      });
+    }
+
+    // unsubscribe when App dismounts
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
 
   // Function to update shared data
   const updateSharedData = (newData) => {

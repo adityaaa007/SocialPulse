@@ -3,13 +3,119 @@ import storageService from "../services/storageService";
 import Popupmenu from "./Popupmenu";
 import { Share, Heart, MessageSquare } from "lucide-react";
 import { useSelector } from "react-redux";
+import databaseService from "../services/databaseService";
+import Comment from "./Comment";
+import CommentBox from "./CommentBox";
 
 function Post({ data, id }) {
   const uid = useSelector((state) => state.auth.userData.uid);
+  const userDbData = useSelector((state) => state.database.userDbData);
+  const [likes, setLikes] = useState(data.likes);
+  const [likedPosts, setLikedPosts] = useState([]);
 
   const [url, setUrl] = useState(null);
 
   const [dateString, setDateString] = useState("");
+
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [refreshComments, setRefreshComments] = useState(null);
+
+  const commentButtonHandler = async () => {
+    setShowComments(!showComments);
+  };
+
+  const refreshCommentsHandler = () => setRefreshComments(Date.now());
+
+  useEffect(() => {
+    // when user open comment section
+    if (showComments) {
+      // if array is empty
+      if (comments.length === 0) {
+        const getAllComments = async () => {
+          const commentDocs = await databaseService.getAllData({
+            collectionPath: `posts/${id}/comments`,
+          });
+
+          console.log("comments fetched...");
+          // save the comments
+          if (commentDocs) {
+            setComments(commentDocs);
+          }
+        };
+
+        getAllComments();
+      }
+    }
+  }, [showComments]);
+
+  // for when a new comment is posted
+  useEffect(() => {
+    // when user open comment section
+    if (showComments) {
+      const getAllComments = async () => {
+        const commentDocs = await databaseService.getAllData({
+          collectionPath: `posts/${id}/comments`,
+        });
+
+        // save the comments
+        if (commentDocs) {
+          setComments(commentDocs);
+        }
+      };
+
+      getAllComments();
+    }
+  }, [refreshComments]);
+
+  const likeHandler = async () => {
+    if (userDbData) {
+      // whether the current post is liked or not
+      if (likedPosts.includes(id)) {
+        setLikes((prevLikes) => prevLikes - 1);
+
+        const newLikedPosts = likedPosts.filter((postId) => postId !== id);
+        await databaseService.updateDocumentField({
+          collectionId: "users",
+          documentId: uid,
+          field: "likedPosts",
+          value: newLikedPosts,
+        });
+
+        setLikedPosts(likedPosts.filter((postId) => postId !== id));
+        await databaseService.updateDocumentField({
+          collectionId: "posts",
+          documentId: id,
+          field: "likes",
+          value: likes - 1,
+        });
+      } else {
+        setLikes((prevLikes) => prevLikes + 1);
+
+        const newLikedPosts = [...likedPosts, id];
+        await databaseService.updateDocumentField({
+          collectionId: "users",
+          documentId: uid,
+          field: "likedPosts",
+          value: newLikedPosts,
+        });
+
+        setLikedPosts((prevPosts) => [...prevPosts, id]);
+        await databaseService.updateDocumentField({
+          collectionId: "posts",
+          documentId: id,
+          field: "likes",
+          value: likes + 1,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (userDbData) {
+      setLikedPosts(userDbData.likedPosts);
+    }
+  }, [userDbData]);
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -33,7 +139,8 @@ function Post({ data, id }) {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 p-8 w-[720px] bg-white rounded-xl">
+    <div className="flex flex-col gap-4 p-8 w-[720px] bg-white rounded-xl transition-all duration-300">
+      {/* header of post */}
       <div className="flex justify-between">
         <div className="flex gap-2">
           <img
@@ -51,6 +158,7 @@ function Post({ data, id }) {
         <Popupmenu author={uid === data.userId}></Popupmenu>
       </div>
 
+      {/* content */}
       <p className="text-neutral-500">{data.content}</p>
       {url ? (
         <img
@@ -60,21 +168,25 @@ function Post({ data, id }) {
         ></img>
       ) : null}
 
+      {/* buttons */}
       <div className="flex justify-between">
         <div className="flex gap-5">
           <span className="flex gap-2 font-medium items-center">
             <Heart
+              fill={likedPosts.includes(id) ? "#EB345E" : "transparent"}
               size={40}
-              color="black"
+              color={likedPosts.includes(id) ? "#EB345E" : "black"}
               className="hover:bg-neutral-100 active:bg-neutral-200 p-2 rounded-full"
+              onClick={likeHandler}
             ></Heart>
-            326
+            {likes}
           </span>
           <span className="flex gap-2 font-medium items-center">
             <MessageSquare
               size={40}
               color="black"
               className="hover:bg-neutral-100 active:bg-neutral-200 p-2 rounded-full"
+              onClick={commentButtonHandler}
             ></MessageSquare>
             148
           </span>
@@ -88,6 +200,22 @@ function Post({ data, id }) {
           ></Share>
         </span>
       </div>
+
+      {/* comment section */}
+      {showComments ? (
+        <CommentBox
+          postId={id}
+          username={data.username}
+          refreshComments={refreshCommentsHandler}
+        ></CommentBox>
+      ) : null}
+      {showComments ? (
+        <div className="">
+          {comments.map((comment) => {
+            return <Comment {...comment} key={comment.data.date}></Comment>;
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }

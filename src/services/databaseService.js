@@ -5,6 +5,9 @@ import {
   getDocs,
   query,
   orderBy,
+  doc,
+  onSnapshot,
+  updateDoc,
 } from "firebase/firestore";
 
 class DatabaseService {
@@ -40,6 +43,32 @@ class DatabaseService {
       throw error;
     }
   }
+
+  listenToDocument = ({ documentId, collectionId, callback }) => {
+    const docRef = doc(db, collectionId, documentId);
+
+    const unsubscribe = onSnapshot(docRef, (doc) => {
+      console.log("Document data: ", doc.data());
+      callback(doc.data());
+    });
+
+    return unsubscribe;
+  };
+
+  updateDocumentField = async ({ collectionId, documentId, field, value }) => {
+    const documentRef = doc(db, collectionId, documentId);
+
+    try {
+      await updateDoc(documentRef, {
+        [field]: value,
+      });
+
+      return true;
+    } catch (error) {
+      console.error("updateDocumentField error:", error);
+      throw error;
+    }
+  };
 }
 
 const databaseService = new DatabaseService();
