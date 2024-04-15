@@ -214,7 +214,7 @@ function Post({ data, id }) {
               className="hover:bg-neutral-100 active:bg-neutral-200 p-2 rounded-full"
               onClick={commentButtonHandler}
             ></MessageSquare>
-            148
+            {comments.length}
           </span>
         </div>
         <span className="flex gap-2 font-medium items-center">
