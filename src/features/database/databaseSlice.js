@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const initialState = {
   userDbData: {
-    likedPosts:[]
+    likedPosts: [],
+    imagePath: "",
   },
 };
 
@@ -14,8 +14,11 @@ const databaseSlice = createSlice({
     updateData: (state, action) => {
       state.userDbData = action.payload;
     },
+    removeData: (state) => {
+      state.userDbData = { likedPosts: [], imagePath: "" };
+    },
   },
 });
 
-export const {updateData} = databaseSlice.actions;
+export const { updateData, removeData } = databaseSlice.actions;
 export default databaseSlice.reducer;

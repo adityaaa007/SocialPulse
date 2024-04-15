@@ -4,15 +4,18 @@ import { Home, Mail, User, Settings } from "lucide-react";
 import SidebarItem from "./SidebarItem";
 import { LogOut } from "lucide-react";
 import { logout } from "../features/auth/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Logo from "./Logo";
 import logo from "../assets/dashboard_logo_white.jpg";
 import authService from "../services/authService";
+import { removeData } from "../features/database/databaseSlice";
+import { remove } from "firebase/database";
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selected, setSelected] = useState("");
   const dispatch = useDispatch();
+  const name = useSelector((state) => state.auth.userData.name);
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
@@ -94,10 +97,18 @@ const Sidebar = () => {
           Settings
         </SidebarItem>
 
+        {isExpanded && (
+          <span className="text-white absolute bottom-20 transition-all duration-300">
+            Hello, <br></br>
+            <span className="font-bold text-white">{name}</span>
+          </span>
+        )}
+
         {/* Logout button */}
         <a
           onClick={async () => {
             dispatch(logout());
+            dispatch(removeData());
             await authService.logout();
           }}
           href="#"

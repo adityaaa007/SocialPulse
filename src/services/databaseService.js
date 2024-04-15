@@ -8,6 +8,9 @@ import {
   doc,
   onSnapshot,
   updateDoc,
+  setDoc,
+  getDoc,
+  documentId,
 } from "firebase/firestore";
 
 class DatabaseService {
@@ -66,6 +69,30 @@ class DatabaseService {
       return true;
     } catch (error) {
       console.error("updateDocumentField error:", error);
+      throw error;
+    }
+  };
+
+  setDocument = async ({ collectionId, documentId, data }) => {
+    const docRef = doc(db, collectionId, documentId);
+
+    try {
+      await setDoc(docRef, data);
+      return true;
+    } catch (error) {
+      console.error("setDocument error:", error);
+      throw error;
+    }
+  };
+
+  getDocument = async ({ collectionId, documentId }) => {
+    const docRef = doc(db, collectionId, documentId);
+
+    try {
+      const docSnap = await getDoc(docRef);
+      return docSnap.data();
+    } catch (error) {
+      console.error("getDocument error:", error);
       throw error;
     }
   };

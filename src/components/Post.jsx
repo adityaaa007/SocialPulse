@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import storageService from "../services/storageService";
 import Popupmenu from "./Popupmenu";
-import { Share, Heart, MessageSquare } from "lucide-react";
+import { Share, Heart, MessageSquare, ImageMinus } from "lucide-react";
 import { useSelector } from "react-redux";
 import databaseService from "../services/databaseService";
 import Comment from "./Comment";
@@ -20,6 +20,10 @@ function Post({ data, id }) {
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
   const [refreshComments, setRefreshComments] = useState(null);
+
+  const [profileImage, setProfileImage] = useState(null);
+
+  const imagePath = useSelector(state => state.database.userDbData.imagePath)
 
   const commentButtonHandler = async () => {
     setShowComments(!showComments);
@@ -75,11 +79,14 @@ function Post({ data, id }) {
         setLikes((prevLikes) => prevLikes - 1);
 
         const newLikedPosts = likedPosts.filter((postId) => postId !== id);
-        await databaseService.updateDocumentField({
+        const newLikedPostsData = {
+          likedPosts: newLikedPosts,
+          imagePath: imagePath
+        };
+        await databaseService.setDocument({
           collectionId: "users",
           documentId: uid,
-          field: "likedPosts",
-          value: newLikedPosts,
+          data: newLikedPostsData,
         });
 
         setLikedPosts(likedPosts.filter((postId) => postId !== id));
@@ -93,11 +100,14 @@ function Post({ data, id }) {
         setLikes((prevLikes) => prevLikes + 1);
 
         const newLikedPosts = [...likedPosts, id];
-        await databaseService.updateDocumentField({
+        const newLikedPostsData = {
+          likedPosts: newLikedPosts,
+          imagePath: imagePath
+        };
+        await databaseService.setDocument({
           collectionId: "users",
           documentId: uid,
-          field: "likedPosts",
-          value: newLikedPosts,
+          data: newLikedPostsData,
         });
 
         setLikedPosts((prevPosts) => [...prevPosts, id]);
@@ -136,6 +146,23 @@ function Post({ data, id }) {
 
       setDateString(formatDate(data.date));
     }
+
+    (async () => {
+      const userData = await databaseService.getDocument({
+        collectionId: "users",
+        documentId: data.userId,
+      });
+
+      if (userData) {
+        const profileImagePath = userData.imagePath;
+        if (profileImagePath) {
+          const url = await storageService.downloadFile({
+            url: profileImagePath,
+          });
+          url && setProfileImage(url);
+        }
+      }
+    })();
   }, []);
 
   return (
@@ -144,10 +171,9 @@ function Post({ data, id }) {
       <div className="flex justify-between">
         <div className="flex gap-2">
           <img
-            src="../assets/react.svg"
-            height={24}
-            width={24}
+            src={profileImage || "../assets/react.svg"}
             alt="userImage"
+            className="object-cover h-10 w-10"
           />
           <div className="flex flex-col gap-1">
             <h3 className="font-bold text-black">{data.username}</h3>
