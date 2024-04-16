@@ -20,16 +20,20 @@ function Post({ data, id }) {
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
   const [refreshComments, setRefreshComments] = useState(null);
+  const [commentsCount, setCommentCount] = useState(data.commentsCount);
 
   const [profileImage, setProfileImage] = useState(null);
 
-  const imagePath = useSelector(state => state.database.userDbData.imagePath)
+  const imagePath = useSelector((state) => state.database.userDbData.imagePath);
 
   const commentButtonHandler = async () => {
     setShowComments(!showComments);
   };
 
-  const refreshCommentsHandler = () => setRefreshComments(Date.now());
+  const refreshCommentsHandler = ({ updatedCount }) => {
+    setCommentCount(updatedCount);
+    setRefreshComments(Date.now());
+  };
 
   useEffect(() => {
     // when user open comment section
@@ -41,7 +45,6 @@ function Post({ data, id }) {
             collectionPath: `posts/${id}/comments`,
           });
 
-          console.log("comments fetched...");
           // save the comments
           if (commentDocs) {
             setComments(commentDocs);
@@ -81,7 +84,7 @@ function Post({ data, id }) {
         const newLikedPosts = likedPosts.filter((postId) => postId !== id);
         const newLikedPostsData = {
           likedPosts: newLikedPosts,
-          imagePath: imagePath
+          imagePath: imagePath,
         };
         await databaseService.setDocument({
           collectionId: "users",
@@ -102,7 +105,7 @@ function Post({ data, id }) {
         const newLikedPosts = [...likedPosts, id];
         const newLikedPostsData = {
           likedPosts: newLikedPosts,
-          imagePath: imagePath
+          imagePath: imagePath,
         };
         await databaseService.setDocument({
           collectionId: "users",
@@ -165,15 +168,19 @@ function Post({ data, id }) {
     })();
   }, []);
 
+  const [deleted, setDeleted] = useState(false)
+
+  const deleteHandler = () => setDeleted(true) 
+
   return (
-    <div className="flex flex-col gap-4 p-8 w-[720px] bg-white rounded-xl transition-all duration-300">
+    <div className={`flex-col gap-4 p-8 w-[720px] bg-white rounded-xl transition-all duration-300 ${deleted ? 'hidden' : 'flex'}`}>
       {/* header of post */}
       <div className="flex justify-between">
         <div className="flex gap-2">
           <img
             src={profileImage || "../assets/react.svg"}
             alt="userImage"
-            className="object-cover h-10 w-10"
+            className="object-cover h-8 w-8"
           />
           <div className="flex flex-col gap-1">
             <h3 className="font-bold text-black">{data.username}</h3>
@@ -181,7 +188,7 @@ function Post({ data, id }) {
           </div>
         </div>
 
-        <Popupmenu author={uid === data.userId}></Popupmenu>
+        <Popupmenu author={uid === data.userId} deleteHandler={deleteHandler} postId={id}></Popupmenu>
       </div>
 
       {/* content */}
@@ -214,7 +221,7 @@ function Post({ data, id }) {
               className="hover:bg-neutral-100 active:bg-neutral-200 p-2 rounded-full"
               onClick={commentButtonHandler}
             ></MessageSquare>
-            {comments.length}
+            {commentsCount}
           </span>
         </div>
         <span className="flex gap-2 font-medium items-center">
@@ -231,12 +238,12 @@ function Post({ data, id }) {
       {showComments ? (
         <CommentBox
           postId={id}
-          username={data.username}
           refreshComments={refreshCommentsHandler}
+          commentsCount={commentsCount}
         ></CommentBox>
       ) : null}
       {showComments ? (
-        <div className="">
+        <div className="max-h-48 overflow-y-auto">
           {comments.map((comment) => {
             return <Comment {...comment} key={comment.data.date}></Comment>;
           })}

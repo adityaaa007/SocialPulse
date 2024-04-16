@@ -15,6 +15,7 @@ function Home() {
   const dispatch = useDispatch();
   const [showPopupDialog, setShowPopupDialog] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [searchText, setSearchText] = useState(null);
 
   const saveUserDbDataCallback = (data) => {
     // saving userDbData in redux
@@ -75,14 +76,18 @@ function Home() {
     setSharedData(newData);
   };
 
+  const searchHandler = ({ text }) => {
+    setSearchText(text);
+  };
+
   return (
     <div className="flex w-full h-screen relative bg-[#F7F7F7] items-center">
       <PopupDialog show={showPopupDialog} onUpload={uploadImage}></PopupDialog>
       <Sidebar></Sidebar>
       <div className="flex-1 overflow-y-auto h-screen px-32 pt-16 flex flex-col gap-7">
-        <Searchbar></Searchbar>
+        <Searchbar searchHandler={searchHandler}></Searchbar>
         <AddPost updateSharedData={updateSharedData}></AddPost>
-        <AllPosts sharedData={sharedData}></AllPosts>
+        <AllPosts sharedData={sharedData} searchText={searchText}></AllPosts>
       </div>
     </div>
   );

@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { EllipsisVertical } from "lucide-react";
+import ConfirmationDialog from "./ConfirmationDialog";
+import databaseService from "../services/databaseService";
+import { useDispatch } from "react-redux";
+import { setUpdatePost } from "../features/database/databaseSlice";
 
-function Popupmenu({ author }) {
+function Popupmenu({ author, deleteHandler, postId }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const dispatch = useDispatch();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -15,8 +21,25 @@ function Popupmenu({ author }) {
     setIsOpen(false);
   };
 
+  const responseHandler = async (response) => {
+    setShowDialog(false);
+
+    if (response) {
+      const deleted = await databaseService.deleteDocument({
+        collectionName: "posts",
+        documentId: postId,
+      });
+      deleted && deleteHandler();
+    }
+  };
+
   return (
     <div className="relative">
+      <ConfirmationDialog
+        show={showDialog}
+        responseHandler={responseHandler}
+        question={"Are you sure to delete this post?"}
+      ></ConfirmationDialog>
       <EllipsisVertical
         size={40}
         color="gray"
@@ -30,7 +53,10 @@ function Popupmenu({ author }) {
               className={`px-4 py-2 hover:bg-gray-100 cursor-pointer ${
                 author ? "block" : "hidden"
               }`}
-              onClick={() => handleItemClick("Option 1")}
+              onClick={() => {
+                setShowDialog(true);
+                setIsOpen(false);
+              }}
             >
               Delete
             </li>
@@ -38,7 +64,10 @@ function Popupmenu({ author }) {
               className={`px-4 py-2 hover:bg-gray-100 cursor-pointer ${
                 author ? "block" : "hidden"
               }`}
-              onClick={() => handleItemClick("Option 2")}
+              onClick={() => {
+                dispatch(setUpdatePost({ postId }));
+                setIsOpen(false);
+              }}
             >
               Edit
             </li>

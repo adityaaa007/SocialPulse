@@ -10,7 +10,7 @@ import {
   updateDoc,
   setDoc,
   getDoc,
-  documentId,
+  deleteDoc,
 } from "firebase/firestore";
 
 class DatabaseService {
@@ -93,6 +93,17 @@ class DatabaseService {
       return docSnap.data();
     } catch (error) {
       console.error("getDocument error:", error);
+      throw error;
+    }
+  };
+
+  deleteDocument = async ({ collectionName, documentId }) => {
+    try {
+      const documentRef = doc(db, collectionName, documentId);
+      await deleteDoc(documentRef);
+      return true;
+    } catch (error) {
+      console.error("deleteDocument error:", error);
       throw error;
     }
   };

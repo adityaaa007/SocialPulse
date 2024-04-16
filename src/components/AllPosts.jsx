@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import databaseService from "../services/databaseService";
 import Post from "./Post";
 
-function AllPosts({ sharedData }) {
+function AllPosts({ sharedData, searchText }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -17,14 +17,21 @@ function AllPosts({ sharedData }) {
     };
 
     getAllPosts();
-
   }, [sharedData]);
 
   return (
     <div className="flex flex-col gap-5">
-      {posts.map((post) => {
-        return <Post {...post} key={post.data.imageUrl}></Post>;
-      })}
+      {searchText
+        ? posts.map((post) => {
+            return (
+              post.data.content.includes(searchText) && (
+                <Post {...post} key={post.data.imageUrl}></Post>
+              )
+            );
+          })
+        : posts.map((post) => {
+            return <Post {...post} key={post.data.imageUrl}></Post>;
+          })}
     </div>
   );
 }

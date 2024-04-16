@@ -5,6 +5,7 @@ const initialState = {
     likedPosts: [],
     imagePath: "",
   },
+  updatePost: null
 };
 
 const databaseSlice = createSlice({
@@ -17,8 +18,11 @@ const databaseSlice = createSlice({
     removeData: (state) => {
       state.userDbData = { likedPosts: [], imagePath: "" };
     },
+    setUpdatePost: (state, action) => {
+      state.updatePost = action.payload;
+    }
   },
 });
 
-export const { updateData, removeData } = databaseSlice.actions;
+export const { updateData, removeData, setUpdatePost } = databaseSlice.actions;
 export default databaseSlice.reducer;

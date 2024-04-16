@@ -5,10 +5,11 @@ import toast, { Toaster } from "react-hot-toast";
 import databaseService from "../services/databaseService";
 import { useSelector } from "react-redux";
 
-function CommentBox({ postId, refreshComments }) {
+function CommentBox({ postId, refreshComments, commentsCount }) {
   const [emoji, setEmoji] = useState(false);
   const [comment, setComment] = useState("");
   const username = useSelector((state) => state.auth.userData.name);
+  const uid = useSelector((state) => state.auth.userData.uid);
 
   const handleEmojiClick = (emoji) => {
     setComment(comment.concat(emoji.emoji));
@@ -16,17 +17,28 @@ function CommentBox({ postId, refreshComments }) {
 
   const handleComment = async () => {
     if (comment) {
-      const data = { comment: comment, date: Date.now(), username: username };
+      const data = {
+        comment: comment,
+        date: Date.now(),
+        username: username,
+        userId: uid,
+      };
 
       const docRef = await databaseService.uploadData({
         collectionPath: `posts/${postId}/comments`,
         data,
       });
 
-      if(docRef) refreshComments(); // this will trigger refetch of updated comments
-      setComment('');
+      const countUpdated = await databaseService.updateDocumentField({
+        collectionId: `posts`,
+        documentId: postId,
+        field: "commentsCount",
+        value: commentsCount + 1,
+      });
+
+      if (docRef && countUpdated) refreshComments({updatedCount: commentsCount + 1}); // this will trigger refetch of updated comments
+      setComment("");
       setEmoji(false);
-      
     } else toast.error("Comment cant be empty !");
   };
 
