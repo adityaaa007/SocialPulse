@@ -4,8 +4,9 @@ import ConfirmationDialog from "./ConfirmationDialog";
 import databaseService from "../services/databaseService";
 import { useDispatch } from "react-redux";
 import { setUpdatePost } from "../features/database/databaseSlice";
+import storageService from "../services/storageService";
 
-function Popupmenu({ author, deleteHandler, postId }) {
+function Popupmenu({ author, deleteHandler, postId, imagePath }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const dispatch = useDispatch();
@@ -29,7 +30,11 @@ function Popupmenu({ author, deleteHandler, postId }) {
         collectionName: "posts",
         documentId: postId,
       });
-      deleted && deleteHandler();
+      const imageDeleted = await storageService.deleteImageFromStorage({
+        imagePath,
+      });
+
+      deleted && imageDeleted && deleteHandler();
     }
   };
 

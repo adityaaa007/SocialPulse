@@ -4,8 +4,11 @@ const initialState = {
   userDbData: {
     likedPosts: [],
     imagePath: "",
+    name: "",
+    address: "",
+    following: [],
   },
-  updatePost: null
+  updatePost: null,
 };
 
 const databaseSlice = createSlice({
@@ -16,11 +19,17 @@ const databaseSlice = createSlice({
       state.userDbData = action.payload;
     },
     removeData: (state) => {
-      state.userDbData = { likedPosts: [], imagePath: "" };
+      state.userDbData = {
+        likedPosts: [],
+        imagePath: "",
+        name: "",
+        address: "",
+        following: [],
+      };
     },
     setUpdatePost: (state, action) => {
       state.updatePost = action.payload;
-    }
+    },
   },
 });
 

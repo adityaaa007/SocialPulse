@@ -8,6 +8,7 @@ import databaseService from "../services/databaseService";
 import { updateData } from "../features/database/databaseSlice";
 import PopupDialog from "../components/PopupDialog";
 import storageService from "../services/storageService";
+import LargeSidebar from "../components/LargeSidebar";
 
 function Home() {
   const [sharedData, setSharedData] = useState("");
@@ -40,6 +41,9 @@ function Home() {
       const data = {
         likedPosts: userData.likedPosts,
         imagePath: url,
+        name: userData.name,
+        address: userData.address,
+        following: userData.following,
       };
 
       const result = await databaseService.setDocument({
@@ -81,13 +85,16 @@ function Home() {
   };
 
   return (
-    <div className="flex w-full h-screen relative bg-[#F7F7F7] items-center">
+    <div className="flex w-full h-screen relative bg-[#F7F7F7] items-center flex-col md:flex-row">
       <PopupDialog show={showPopupDialog} onUpload={uploadImage}></PopupDialog>
       <Sidebar></Sidebar>
-      <div className="flex-1 overflow-y-auto h-screen px-32 pt-16 flex flex-col gap-7">
-        <Searchbar searchHandler={searchHandler}></Searchbar>
-        <AddPost updateSharedData={updateSharedData}></AddPost>
-        <AllPosts sharedData={sharedData} searchText={searchText}></AllPosts>
+      <div className="flex-1 h-screen flex overflow-y-auto w-full md:w-full">
+        <div className="flex flex-1 h-screen flex-col md:px-12 lg:px-32 lg:me-[512px] md:me-[380px] px-4 gap-7 pt-10">
+          <Searchbar searchHandler={searchHandler}></Searchbar>
+          <AddPost updateSharedData={updateSharedData}></AddPost>
+          <AllPosts sharedData={sharedData} searchText={searchText}></AllPosts>
+        </div>
+        <LargeSidebar></LargeSidebar>
       </div>
     </div>
   );

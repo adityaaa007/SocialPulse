@@ -9,11 +9,10 @@ import Logo from "./Logo";
 import logo from "../assets/dashboard_logo_white.jpg";
 import authService from "../services/authService";
 import { removeData } from "../features/database/databaseSlice";
-import { remove } from "firebase/database";
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState("home");
   const dispatch = useDispatch();
   const name = useSelector((state) => state.auth.userData.name);
 
@@ -25,7 +24,7 @@ const Sidebar = () => {
     <div
       className={`bg-primary text-white h-screen ${
         isExpanded ? "w-52" : "w-28"
-      } transition-all duration-300 px-8 flex flex-col sticky top-0`}
+      } transition-all duration-300 px-8 md:flex hidden flex-col sticky top-0`}
     >
       <Logo src={logo} className="mt-8 mb-4 self-center"></Logo>
       <div className="flex justify-center items-center h-16">

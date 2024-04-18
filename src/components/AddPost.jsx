@@ -136,11 +136,11 @@ function AddPost({ updateSharedData }) {
     <div
       ref={scrollRef}
       id="addPostContainer"
-      className="p-8 w-[720px] bg-white rounded-xl flex flex-col gap-5 duration-300 border-2 border-transparent"
+      className="p-8 w-full bg-white rounded-xl flex flex-col gap-5 duration-300 border-2 border-transparent"
     >
       <Toaster position="top-center" reverseOrder={false} />
       <div className="flex gap-5 items-start relative">
-        <img src={imageUrl || image} className="h-10 w-10" alt="image" />
+        <img src={imageUrl || image} className="h-10 w-10 rounded-xl" alt="image" />
         <textarea
           className="outline-none flex-1 h-24 resize-none"
           rows="4"

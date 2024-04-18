@@ -173,14 +173,14 @@ function Post({ data, id }) {
   const deleteHandler = () => setDeleted(true) 
 
   return (
-    <div className={`flex-col gap-4 p-8 w-[720px] bg-white rounded-xl transition-all duration-300 ${deleted ? 'hidden' : 'flex'}`}>
+    <div className={`flex-col gap-4 p-8 w-full bg-white rounded-xl transition-all duration-300 ${deleted ? 'hidden' : 'flex'}`}>
       {/* header of post */}
       <div className="flex justify-between">
         <div className="flex gap-2">
           <img
             src={profileImage || "../assets/react.svg"}
             alt="userImage"
-            className="object-cover h-8 w-8"
+            className="object-cover h-8 w-8 rounded-xl"
           />
           <div className="flex flex-col gap-1">
             <h3 className="font-bold text-black">{data.username}</h3>
@@ -188,7 +188,7 @@ function Post({ data, id }) {
           </div>
         </div>
 
-        <Popupmenu author={uid === data.userId} deleteHandler={deleteHandler} postId={id}></Popupmenu>
+        <Popupmenu author={uid === data.userId} deleteHandler={deleteHandler} postId={id} imagePath={data.imageUrl}></Popupmenu>
       </div>
 
       {/* content */}

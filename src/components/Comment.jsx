@@ -23,8 +23,9 @@ function Comment({ data }) {
     <div className="flex flex-col gap-1 w-full mt-4 pe-4">
       {/* comment header */}
       <div className="flex justify-between">
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           <img
+            className="rounded-lg"
             src={imageUrl || "../assets/react.svg"}
             height={24}
             width={24}

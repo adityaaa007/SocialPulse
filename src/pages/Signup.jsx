@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { login as authLogin } from "../features/auth/authSlice.js";
 import { useNavigate } from "react-router-dom";
 import Logo from "../components/Logo.jsx";
+import databaseService from "../services/databaseService.js";
 
 function Signup() {
   const { register, handleSubmit } = useForm();
@@ -30,6 +31,11 @@ function Signup() {
           name: data.name,
         });
         if (userDataWithName) {
+          await databaseService.setDocument({
+            collectionId: "users",
+            documentId: userDataWithName.uid,
+            data: { imagePath: "", likedPosts: [], name: data.name, address: data.address, following:[] },
+          });
           dispatch(
             authLogin({
               uid: userDataWithName.uid,
@@ -68,6 +74,13 @@ function Signup() {
             type={"text"}
             style={"mt-4"}
             {...register("name", { required: true })}
+          ></FormInput>
+          <FormInput
+            label={"ADDRESS"}
+            placeholder={"MP, India"}
+            type={"text"}
+            style={"mt-4"}
+            {...register("address", { required: true })}
           ></FormInput>
           <FormInput
             label={"EMAIL"}

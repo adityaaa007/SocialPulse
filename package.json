@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@lottiefiles/react-lottie-player": "^3.5.3",
     "@reduxjs/toolkit": "^2.2.3",
+    "browser-image-compression": "^2.0.2",
     "emoji-picker-react": "^4.9.2",
     "firebase": "^10.10.0",
     "lucide-react": "^0.365.0",

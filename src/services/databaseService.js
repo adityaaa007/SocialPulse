@@ -29,11 +29,11 @@ class DatabaseService {
     }
   }
 
-  async getAllData({ collectionPath }) {
+  async getAllData({ collectionPath, queryName, queryOrder }) {
     this.dbCollection = collection(db, collectionPath);
 
     try {
-      const q = query(this.dbCollection, orderBy("date", "desc"));
+      const q = queryName ? query(this.dbCollection, orderBy(queryName, queryOrder)) : query(this.dbCollection);
       const querySnapshot = await getDocs(q);
       const docs = [];
       querySnapshot.forEach((doc) => {
