@@ -5,6 +5,7 @@ import { Share, Heart, MessageSquare, ImageMinus } from "lucide-react";
 import { useSelector } from "react-redux";
 import databaseService from "../services/databaseService";
 import Comment from "./Comment";
+import backupImage from '../assets/boy.png'
 import CommentBox from "./CommentBox";
 
 function Post({ data, id }) {
@@ -85,6 +86,9 @@ function Post({ data, id }) {
         const newLikedPostsData = {
           likedPosts: newLikedPosts,
           imagePath: imagePath,
+          following: userDbData.following,
+          address: userDbData.address,
+          name: userDbData.name
         };
         await databaseService.setDocument({
           collectionId: "users",
@@ -106,6 +110,9 @@ function Post({ data, id }) {
         const newLikedPostsData = {
           likedPosts: newLikedPosts,
           imagePath: imagePath,
+          following: userDbData.following,
+          address: userDbData.address,
+          name: userDbData.name
         };
         await databaseService.setDocument({
           collectionId: "users",
@@ -178,7 +185,7 @@ function Post({ data, id }) {
       <div className="flex justify-between">
         <div className="flex gap-2">
           <img
-            src={profileImage || "../assets/react.svg"}
+            src={profileImage || backupImage}
             alt="userImage"
             className="object-cover h-8 w-8 rounded-xl"
           />

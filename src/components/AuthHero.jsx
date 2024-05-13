@@ -20,7 +20,7 @@ function AuthHero({ text, buttonTxt }) {
 
       <h3 className="font-medium text-white z-10 text-3xl">Hello!</h3>
       <p className="text-neutral-300 z-10">{text}</p>
-      <Button style={"w-fit lg:w-64"} clickHandler={clickHandler}>
+      <Button style={"w-fit lg:w-64 hover:bg-indigo-600 bg-primary"} clickHandler={clickHandler}>
         {buttonTxt}
       </Button>
     </div>

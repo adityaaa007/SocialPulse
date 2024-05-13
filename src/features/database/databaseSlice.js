@@ -9,6 +9,9 @@ const initialState = {
     following: [],
   },
   updatePost: null,
+  theme: "dark",
+  posts: [],
+  userPosts: {}
 };
 
 const databaseSlice = createSlice({
@@ -30,8 +33,18 @@ const databaseSlice = createSlice({
     setUpdatePost: (state, action) => {
       state.updatePost = action.payload;
     },
+    setTheme: (state, action) => {
+      state.theme = action.payload;
+    },
+    savePosts: (state, action) => {
+      state.posts = action.payload;
+    },
+    saveUserPosts: (state, action) => {
+      state.userPosts[action.payload.userId] = action.payload.posts;
+    },
   },
 });
 
-export const { updateData, removeData, setUpdatePost } = databaseSlice.actions;
+export const { updateData, removeData, setUpdatePost, setTheme, savePosts, saveUserPosts } =
+  databaseSlice.actions;
 export default databaseSlice.reducer;

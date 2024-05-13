@@ -9,6 +9,8 @@ import AuthLayout from "./components/AuthLayout.jsx";
 import Home from "./pages/Home.jsx";
 import { Provider } from "react-redux";
 import store from "./store/store.js";
+import Profile from "./pages/Profile.jsx";
+import Settings from "./pages/Settings.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,14 +41,28 @@ const router = createBrowserRouter([
           </AuthLayout>
         ),
       },
+      {
+        path: "/profile",
+        element: (
+          <AuthLayout authentication>
+            <Profile></Profile>
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/settings",
+        element: (
+          <AuthLayout authentication>
+            <Settings></Settings>
+          </AuthLayout>
+        ),
+      },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );

@@ -1,6 +1,6 @@
 // Sidebar.js
 import React, { useState } from "react";
-import { Home, Mail, User, Settings } from "lucide-react";
+import { Home, User, Settings } from "lucide-react";
 import SidebarItem from "./SidebarItem";
 import { LogOut } from "lucide-react";
 import { logout } from "../features/auth/authSlice";
@@ -9,12 +9,14 @@ import Logo from "./Logo";
 import logo from "../assets/dashboard_logo_white.jpg";
 import authService from "../services/authService";
 import { removeData } from "../features/database/databaseSlice";
+import { useNavigate } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = ({initialPage}) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selected, setSelected] = useState("home");
+  const [selected, setSelected] = useState(initialPage);
   const dispatch = useDispatch();
   const name = useSelector((state) => state.auth.userData.name);
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
@@ -52,22 +54,12 @@ const Sidebar = () => {
           }
           isExpanded={isExpanded}
           isSelected={selected === "home"} // Pass isSelected prop based on selected state
-          onClick={() => setSelected("home")} // Set selected state when clicked
+          onClick={() => {
+            setSelected("home");
+            navigate("/");
+          }} // Set selected state when clicked
         >
           Home
-        </SidebarItem>
-        <SidebarItem
-          icon={
-            <Mail
-              color={selected === "messages" ? "#666BED" : "white"}
-              size={24}
-            />
-          }
-          isExpanded={isExpanded}
-          isSelected={selected === "messages"} // Pass isSelected prop based on selected state
-          onClick={() => setSelected("messages")} // Set selected state when clicked
-        >
-          Messages
         </SidebarItem>
         <SidebarItem
           icon={
@@ -78,7 +70,10 @@ const Sidebar = () => {
           }
           isExpanded={isExpanded}
           isSelected={selected === "profile"} // Pass isSelected prop based on selected state
-          onClick={() => setSelected("profile")} // Set selected state when clicked
+          onClick={() => {
+            setSelected("profile");
+            navigate("/profile");
+          }} // Set selected state when clicked
         >
           Profile
         </SidebarItem>
@@ -91,7 +86,10 @@ const Sidebar = () => {
           }
           isExpanded={isExpanded}
           isSelected={selected === "settings"} // Pass isSelected prop based on selected state
-          onClick={() => setSelected("settings")} // Set selected state when clicked
+          onClick={() => {
+            setSelected("settings");
+            navigate("/settings");
+          }} // Set selected state when clicked
         >
           Settings
         </SidebarItem>

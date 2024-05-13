@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import image from "../assets/react.svg";
+import image from "../assets/boy.png";
 import { Camera, Plus, ChevronRight, Trash2, Smile } from "lucide-react";
 import storageService from "../services/storageService";
 import { useSelector, useDispatch } from "react-redux";

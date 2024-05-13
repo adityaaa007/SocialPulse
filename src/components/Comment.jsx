@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import storageService from "../services/storageService";
+import backupImage from '../assets/boy.png'
 
 function Comment({ data }) {
   const formatDate = (timestamp) => {
@@ -26,7 +27,7 @@ function Comment({ data }) {
         <div className="flex gap-2">
           <img
             className="rounded-lg"
-            src={imageUrl || "../assets/react.svg"}
+            src={imageUrl || backupImage}
             height={24}
             width={24}
             alt="userImage"

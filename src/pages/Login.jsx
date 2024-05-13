@@ -4,7 +4,7 @@ import FormInput from "../components/FormInput.jsx";
 import Button from "../components/Button.jsx";
 import authService from "../services/authService.js";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login as authLogin } from "../features/auth/authSlice.js";
 import { useNavigate } from "react-router-dom";
 import Logo from "../components/Logo.jsx";
@@ -38,13 +38,16 @@ function Login() {
     // setLoading(false);
   };
 
+  const theme = useSelector(state => state.database.theme)
+
+
   return (
     <div className="w-full min-h-screen flex flex-col-reverse lg:flex-row">
       <AuthHero
         text={"Don`t have an account yet?"}
         buttonTxt={"Create and account"}
       ></AuthHero>
-      <div className="lg:absolute top-0 right-0 z-50 bg-white w-full lg:w-1/2 h-auto lg:h-screen flex flex-col items-center lg:items-start justify-center px-8 lg:px-24 py-16 rounded-bl-3xl rounded-br-3xl lg:rounded-tl-3xl lg:rounded-bl-3xl">
+      <div className="lg:absolute top-0 right-0 z-50 bg-lightSecondary w-full lg:w-1/2 h-auto lg:h-screen flex flex-col items-center lg:items-start justify-center px-8 lg:px-24 py-16">
         <Logo></Logo>
 
         <h3 className="font-bold text-black z-10 text-xl mt-8">Welcome back</h3>
@@ -79,7 +82,7 @@ function Login() {
 
           <p className="text-red-500 mt-2">{error}</p>
 
-          <Button type="submit" style={"lg:w-96 w-fit mt-8"}>
+          <Button type="submit" style={"lg:w-96 w-fit mt-8 hover:bg-indigo-600 bg-primary"}>
             Login
           </Button>
         </form>

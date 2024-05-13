@@ -11,6 +11,7 @@ import {
   setDoc,
   getDoc,
   deleteDoc,
+  where
 } from "firebase/firestore";
 
 class DatabaseService {
@@ -33,7 +34,9 @@ class DatabaseService {
     this.dbCollection = collection(db, collectionPath);
 
     try {
-      const q = queryName ? query(this.dbCollection, orderBy(queryName, queryOrder)) : query(this.dbCollection);
+      const q = queryName
+        ? query(this.dbCollection, orderBy(queryName, queryOrder))
+        : query(this.dbCollection);
       const querySnapshot = await getDocs(q);
       const docs = [];
       querySnapshot.forEach((doc) => {
@@ -43,6 +46,24 @@ class DatabaseService {
       return docs;
     } catch (error) {
       console.log("getAllData error: " + error);
+      throw error;
+    }
+  }
+
+  async getUserPosts({ userId }) {
+    this.dbCollection = collection(db, "posts");
+
+    try {
+      const q = query(this.dbCollection, where("userId", "==", userId));
+      const querySnapshot = await getDocs(q);
+      const docs = [];
+      querySnapshot.forEach((doc) => {
+        docs.push({ data: doc.data(), id: doc.id });
+      });
+
+      return docs;
+    } catch (error) {
+      console.log("getUserPosts error: " + error);
       throw error;
     }
   }

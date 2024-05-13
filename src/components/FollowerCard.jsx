@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { UserPlus, UserCheck } from "lucide-react";
-import icon from "../assets/react.svg";
+import icon from "../assets/boy.png";
 import storageService from "../services/storageService";
 import { useDispatch, useSelector } from "react-redux";
 import databaseService from "../services/databaseService";

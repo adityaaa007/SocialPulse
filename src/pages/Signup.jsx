@@ -106,7 +106,7 @@ function Signup() {
 
           <p className="text-red-500 mt-2">{error}</p>
 
-          <Button type="submit" style={"lg:w-96 w-fit mt-8"}>
+          <Button type="submit" style={"lg:w-96 w-fit mt-8 hover:bg-indigo-600 bg-primary"}>
             Create an account
           </Button>
         </form>
