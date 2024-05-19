@@ -1,7 +1,7 @@
 import React from "react";
 
 const FormInput = React.forwardRef(function FormInput(
-  { label, type, placeholder, style, ...props },
+  { label, type, placeholder, style, initialValue = "", ...props },
   ref
 ) {
   return (
@@ -16,6 +16,7 @@ const FormInput = React.forwardRef(function FormInput(
         placeholder={placeholder}
         ref={ref}
         {...props}
+        defaultValue={initialValue}
       />
     </div>
   );

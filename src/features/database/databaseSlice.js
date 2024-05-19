@@ -11,7 +11,7 @@ const initialState = {
   updatePost: null,
   theme: "dark",
   posts: [],
-  userPosts: {}
+  userPosts: {},
 };
 
 const databaseSlice = createSlice({
@@ -42,9 +42,24 @@ const databaseSlice = createSlice({
     saveUserPosts: (state, action) => {
       state.userPosts[action.payload.userId] = action.payload.posts;
     },
+    updateImagePath: (state, action) => {
+      state.userDbData.imagePath = action.payload;
+    },
+    updateNameAddress: (state, action) => {
+      state.userDbData.name = action.payload.name;
+      state.userDbData.address = action.payload.address;
+    },
   },
 });
 
-export const { updateData, removeData, setUpdatePost, setTheme, savePosts, saveUserPosts } =
-  databaseSlice.actions;
+export const {
+  updateData,
+  removeData,
+  setUpdatePost,
+  setTheme,
+  savePosts,
+  saveUserPosts,
+  updateImagePath,
+  updateNameAddress,
+} = databaseSlice.actions;
 export default databaseSlice.reducer;

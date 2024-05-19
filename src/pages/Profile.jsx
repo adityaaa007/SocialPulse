@@ -43,6 +43,7 @@ function Profile() {
       <Sidebar initialPage={"profile"}></Sidebar>
       <div className="flex-1 h-screen flex overflow-y-auto w-full md:w-full">
         <div className="flex flex-1 h-screen flex-col md:px-12 lg:px-32 lg:me-[512px] md:me-[380px] px-4 gap-7 pt-10">
+          <h2 className="font-semibold text-2xl">Your posts</h2>
           {loading ? (
             <Player
               className="absolute top-[-128px]"

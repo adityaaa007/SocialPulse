@@ -9,8 +9,8 @@ function ProfileSidebar() {
   const imagePath = useSelector((state) => state.database.userDbData.imagePath);
   const name = useSelector((state) => state.database.userDbData.name);
   const uid = useSelector((state) => state.auth.userData.uid);
-  const postCount = useSelector(
-    (state) => state.database.userPosts[uid] ? state.database.userPosts[uid].length : 0
+  const postCount = useSelector((state) =>
+    state.database.userPosts[uid] ? state.database.userPosts[uid].length : 0
   );
   const followingCount = useSelector(
     (state) => state.database.userDbData.following.length
@@ -19,7 +19,7 @@ function ProfileSidebar() {
     (state) => state.database.userDbData.following
   );
   const [imageUrl, setImageUrl] = useState("");
-  const [urlList, setUrlList] = useState([]);
+  const [dataList, setDataList] = useState([]);
   const loadImage = async (path) => {
     const url = await storageService.downloadFile({ url: path });
     if (url) {
@@ -48,7 +48,7 @@ function ProfileSidebar() {
         list.map(async (user) => {
           if (uid !== user.id) {
             const url = await loadImage(user.imagePath);
-            setUrlList((prevList) => [...prevList, url]);
+            setDataList((prevList) => [...prevList, { url, name: user.name }]);
           }
         });
       }
@@ -100,14 +100,18 @@ function ProfileSidebar() {
           {followingCount === 0 ? (
             <p className="text-neutral-400">{"No one found :("}</p>
           ) : (
-            urlList.map((url) => {
+            dataList.map((data) => {
               return (
-                <img
-                  key={url}
-                  src={url}
-                  alt="following-image"
-                  className="w-16 h-16 rounded-lg object-cover"
-                ></img>
+                <div key={data.url} className="relative inline-block group">
+                  <img
+                    src={data.url}
+                    alt="following-image"
+                    className="w-16 h-16 rounded-lg object-cover block"
+                  ></img>
+                  <div className="absolute left-1/2 bottom-full transform -translate-x-1/2 mb-2 w-max px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                    {data.name}
+                  </div>
+                </div>
               );
             })
           )}
