@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import storageService from "../services/storageService";
-import backupImage from '../assets/boy.png'
+import backupImage from "../assets/boy.png";
+import { useSelector } from "react-redux";
 
 function Comment({ data }) {
   const formatDate = (timestamp) => {
@@ -10,6 +11,7 @@ function Comment({ data }) {
   };
 
   const [imageUrl, setImageUrl] = useState(null);
+  const lightTheme = useSelector((state) => state.settings.lightTheme);
 
   useEffect(() => {
     (async () => {
@@ -32,13 +34,25 @@ function Comment({ data }) {
             width={24}
             alt="userImage"
           />
-          <h4 className="font-medium text-black">{data.username}</h4>
+          <h4
+            className={`font-medium ${
+              lightTheme ? "text-black" : "text-white"
+            }`}
+          >
+            {data.username}
+          </h4>
         </div>
         <span className="text-neutral-400 text-sm">
           {formatDate(data.date)}
         </span>
       </div>
-      <p className="text-n text-sm text-neutral-500">{data.comment}</p>
+      <p
+        className={`text-n text-sm ${
+          lightTheme ? "text-neutral-500" : "text-neutral-300"
+        }`}
+      >
+        {data.comment}
+      </p>
     </div>
   );
 }

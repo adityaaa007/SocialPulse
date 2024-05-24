@@ -19,6 +19,7 @@ function AddPost({ updateSharedData }) {
   const scrollRef = useRef(null);
   const [post, setPost] = useState(null);
   const dispatch = useDispatch();
+  const lightTheme = useSelector((state) => state.settings.lightTheme);
 
   const uid = useSelector((state) => state.auth.userData.uid);
   const name = useSelector((state) => state.auth.userData.name);
@@ -127,7 +128,6 @@ function AddPost({ updateSharedData }) {
         setEmoji(false);
         updateSharedData(url); // for triggering rerender of AllPosts and passing a unique data(url) to make the state change whenever there is new post posted
       }
-      
     } else toast.error("Write some text and add image !");
     setSaving(false);
   };
@@ -136,13 +136,21 @@ function AddPost({ updateSharedData }) {
     <div
       ref={scrollRef}
       id="addPostContainer"
-      className="p-8 w-full bg-white rounded-xl flex flex-col gap-5 duration-300 border-2 border-transparent"
+      className={`p-8 w-full ${
+        lightTheme ? "bg-white" : "bg-tertiary"
+      } rounded-xl flex flex-col gap-5 duration-300 border-2 border-transparent`}
     >
       <Toaster position="top-center" reverseOrder={false} />
       <div className="flex gap-5 items-start relative">
-        <img src={imageUrl || image} className="h-10 w-10 rounded-xl" alt="image" />
+        <img
+          src={imageUrl || image}
+          className="h-10 w-10 rounded-xl"
+          alt="image"
+        />
         <textarea
-          className="outline-none flex-1 h-24 resize-none"
+          className={`outline-none ${
+            lightTheme ? "bg-white text-black" : "bg-tertiary text-white"
+          } flex-1 h-24 resize-none`}
           rows="4"
           placeholder="What are you thinking?"
           value={content}
@@ -151,7 +159,11 @@ function AddPost({ updateSharedData }) {
         <Smile
           color={"gray"}
           size={40}
-          className="hover:bg-neutral-100 active:bg-neutral-200 p-2 rounded-full"
+          className={`${
+            lightTheme
+              ? "hover:bg-neutral-100 active:bg-neutral-200"
+              : "hover:bg-neutral-700 active:bg-neutral-800"
+          } p-2 rounded-full`}
           onClick={() => setEmoji(!emoji)}
         />
         <EmojiPicker
@@ -187,7 +199,7 @@ function AddPost({ updateSharedData }) {
       <div className="flex justify-between">
         <div className="flex gap-3">
           <button
-            className="p-3 bg-neutral-100 w-12 rounded-full hover:bg-neutral-200"
+            className={`p-3  w-12 rounded-full ${lightTheme ? "bg-neutral-100 hover:bg-neutral-200" : "bg-neutral-700 hover:bg-neutral-600"}`}
             onClick={() => document.getElementById("postImageInput").click()}
           >
             <Camera color={"gray"} size={24} />
@@ -199,7 +211,7 @@ function AddPost({ updateSharedData }) {
               onChange={handleImageChange}
             />
           </button>
-          <button className="p-3 bg-neutral-100 w-12 rounded-full hover:bg-neutral-200">
+          <button className={`p-3 w-12 rounded-full ${lightTheme ? "bg-neutral-100 hover:bg-neutral-200" : "bg-neutral-700 hover:bg-neutral-600"}`}>
             <Plus color={"gray"} size={24} />
           </button>
         </div>

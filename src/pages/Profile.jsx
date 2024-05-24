@@ -7,6 +7,7 @@ import databaseService from "../services/databaseService";
 import { Controls, Player } from "@lottiefiles/react-lottie-player";
 import shimmerAnim from "../assets/shimmer_posts.json";
 import Post from "../components/Post";
+import Navbar from "../components/Navbar";
 
 function Profile() {
   const [posts, setPosts] = useState([]);
@@ -15,6 +16,7 @@ function Profile() {
   const dispatch = useDispatch();
   const uid = useSelector((state) => state.auth.userData.uid);
   const savedPosts = useSelector((state) => state.database.userPosts[uid]);
+  const lightTheme = useSelector((state) => state.settings.lightTheme);
 
   useEffect(() => {
     const getUserPosts = async () => {
@@ -39,11 +41,12 @@ function Profile() {
   }, []);
 
   return (
-    <div className="flex w-full h-screen relative bg-[#F7F7F7] items-center flex-col md:flex-row">
+    <div className={`flex w-full h-screen relative ${lightTheme ? 'bg-bgLight' : "bg-bgDark"} items-center flex-col md:flex-row`}>
       <Sidebar initialPage={"profile"}></Sidebar>
+      <Navbar initialPage={"profile"}></Navbar>
       <div className="flex-1 h-screen flex overflow-y-auto w-full md:w-full">
         <div className="flex flex-1 h-screen flex-col md:px-12 lg:px-32 lg:me-[512px] md:me-[380px] px-4 gap-7 pt-10">
-          <h2 className="font-semibold text-2xl">Your posts</h2>
+          <h2 className={`font-semibold text-2xl ${lightTheme ? 'text-black' : 'text-white'}`}>Your posts</h2>
           {loading ? (
             <Player
               className="absolute top-[-128px]"

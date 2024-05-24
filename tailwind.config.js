@@ -9,7 +9,7 @@ export default {
         darkSecondary: '#131723',
         tertiary: '#1E1F21',
         bgLight: '#F7F7F7',
-        lightSecondary: '#FFFFFF'
+        lightSecondary: '#FFFFFF',
       },
     },
   },

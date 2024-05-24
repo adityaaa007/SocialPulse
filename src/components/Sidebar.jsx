@@ -17,6 +17,7 @@ const Sidebar = ({initialPage}) => {
   const dispatch = useDispatch();
   const name = useSelector((state) => state.auth.userData.name);
   const navigate = useNavigate();
+  const lightTheme = useSelector((state) => state.settings.lightTheme);
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
@@ -32,7 +33,7 @@ const Sidebar = ({initialPage}) => {
       <div className="flex justify-center items-center h-16">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 text-neutral-200 cursor-pointer"
+          className={`h-6 w-6 ${lightTheme ? 'text-neutral-200' : "text-neutral-700"} cursor-pointer`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -50,7 +51,7 @@ const Sidebar = ({initialPage}) => {
       <ul className="flex flex-col gap-5 items-start relative h-screen">
         <SidebarItem
           icon={
-            <Home color={selected === "home" ? "#666BED" : "white"} size={24} />
+            <Home color={selected === "home" ? "#666BED" : `${lightTheme ? 'white' : "#00000080"}`} size={24} />
           }
           isExpanded={isExpanded}
           isSelected={selected === "home"} // Pass isSelected prop based on selected state
@@ -64,7 +65,7 @@ const Sidebar = ({initialPage}) => {
         <SidebarItem
           icon={
             <User
-              color={selected === "profile" ? "#666BED" : "white"}
+              color={selected === "profile" ? "#666BED" : `${lightTheme ? 'white' : "#00000080"}`}
               size={24}
             />
           }
@@ -80,7 +81,7 @@ const Sidebar = ({initialPage}) => {
         <SidebarItem
           icon={
             <Settings
-              color={selected === "settings" ? "#666BED" : "white"}
+              color={selected === "settings" ? "#666BED" : `${lightTheme ? 'white' : "#00000080"}`}
               size={24}
             />
           }
@@ -95,9 +96,9 @@ const Sidebar = ({initialPage}) => {
         </SidebarItem>
 
         {isExpanded && (
-          <span className="text-white absolute bottom-20 transition-all duration-300">
+          <span className={`text-white ${lightTheme ? 'text-white' : "text-black/70"} absolute bottom-20 transition-all duration-300`}>
             Hello, <br></br>
-            <span className="font-bold text-white">{name}</span>
+            <span className={`font-bold ${lightTheme ? 'text-white' : "text-black/70"}`}>{name}</span>
           </span>
         )}
 
@@ -109,13 +110,13 @@ const Sidebar = ({initialPage}) => {
             await authService.logout();
           }}
           href="#"
-          className={`flex gap-3 py-[10px] px-[10px] border-2 border-white/50 rounded-lg hover:bg-white/10 ${
+          className={`flex gap-3 py-[10px] px-[10px] border-2 ${lightTheme ? 'hover:bg-white/10 border-white/50' : "hover:bg-black/10 border-black/20"} rounded-lg  ${
             isExpanded ? "w-full justify-start" : "w-auto justify-center"
           } duration-300 absolute bottom-4`}
         >
-          <LogOut color="white" size={24} />
+          <LogOut color={`${lightTheme ? 'white' : "#00000080"}`} size={24} />
           <p
-            className={`text-white font-medium text-base ${
+            className={`${lightTheme ? 'text-white' : "text-black/70"} font-medium text-base ${
               isExpanded ? "block" : "hidden"
             } transition-all duration-300`}
           >

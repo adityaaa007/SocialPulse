@@ -10,6 +10,7 @@ function CommentBox({ postId, refreshComments, commentsCount }) {
   const [comment, setComment] = useState("");
   const username = useSelector((state) => state.auth.userData.name);
   const uid = useSelector((state) => state.auth.userData.uid);
+  const lightTheme = useSelector((state) => state.settings.lightTheme);
 
   const handleEmojiClick = (emoji) => {
     setComment(comment.concat(emoji.emoji));
@@ -36,7 +37,8 @@ function CommentBox({ postId, refreshComments, commentsCount }) {
         value: commentsCount + 1,
       });
 
-      if (docRef && countUpdated) refreshComments({updatedCount: commentsCount + 1}); // this will trigger refetch of updated comments
+      if (docRef && countUpdated)
+        refreshComments({ updatedCount: commentsCount + 1 }); // this will trigger refetch of updated comments
       setComment("");
       setEmoji(false);
     } else toast.error("Comment cant be empty !");
@@ -46,7 +48,11 @@ function CommentBox({ postId, refreshComments, commentsCount }) {
     <div className="w-full relative">
       <Toaster position="top-center" reverseOrder={false} />
       <input
-        className="px-5 py-4 border-2 border-neutral-200 rounded-lg focus:border-primary focus:outline-none w-full"
+        className={`px-5 py-4 border-2 ${
+          lightTheme
+            ? "border-neutral-200 bg-white text-black"
+            : "border-neutral-800 bg-neutral-800 text-white"
+        } rounded-lg focus:border-primary focus:outline-none w-full`}
         placeholder="Write a comment..."
         value={comment}
         onChange={(e) => setComment(e.target.value)}
@@ -55,13 +61,21 @@ function CommentBox({ postId, refreshComments, commentsCount }) {
         fill="#666BED"
         size={40}
         color="#666BED"
-        className="hover:bg-neutral-100 active:bg-neutral-200 p-2 rounded-full absolute top-[9px] right-4"
+        className={`${
+          lightTheme
+            ? "hover:bg-neutral-100 active:bg-neutral-200"
+            : "hover:bg-neutral-700 active:bg-neutral-800"
+        } p-2 rounded-full absolute top-[9px] right-4`}
         onClick={handleComment}
       ></SendHorizonal>
       <Smile
         size={40}
         color="gray"
-        className="hover:bg-neutral-100 active:bg-neutral-200 p-2 rounded-full absolute top-[9px] right-16"
+        className={`${
+          lightTheme
+            ? "hover:bg-neutral-100 active:bg-neutral-200"
+            : "hover:bg-neutral-700 active:bg-neutral-800"
+        } p-2 rounded-full absolute top-[9px] right-16`}
         onClick={() => setEmoji(!emoji)}
       ></Smile>
       <EmojiPicker

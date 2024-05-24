@@ -9,6 +9,7 @@ import { updateData } from "../features/database/databaseSlice";
 import PopupDialog from "../components/PopupDialog";
 import storageService from "../services/storageService";
 import LargeSidebar from "../components/LargeSidebar";
+import Navbar from "../components/Navbar";
 
 function Home() {
   const [sharedData, setSharedData] = useState("");
@@ -18,6 +19,7 @@ function Home() {
   const [userData, setUserData] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [filter, setFilter] = useState("all");
+  const lightTheme = useSelector((state) => state.settings.lightTheme);
 
   const saveUserDbDataCallback = (data) => {
     // saving userDbData in redux
@@ -87,9 +89,10 @@ function Home() {
   };
 
   return (
-    <div className="flex w-full h-screen relative bg-[#F7F7F7] items-center flex-col md:flex-row">
+    <div className={`flex w-full h-screen relative ${lightTheme ? 'bg-bgLight' : "bg-bgDark"} items-center flex-col md:flex-row`}>
       <PopupDialog show={showPopupDialog} onUpload={uploadImage}></PopupDialog>
       <Sidebar initialPage={"home"}></Sidebar>
+      <Navbar initialPage={"home"}></Navbar>
       <div className="flex-1 h-screen flex overflow-y-auto w-full md:w-full">
         <div className="flex flex-1 h-screen flex-col md:px-12 lg:px-32 lg:me-[512px] md:me-[380px] px-4 gap-7 pt-10">
           <Searchbar searchHandler={searchHandler}></Searchbar>

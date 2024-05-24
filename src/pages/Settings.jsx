@@ -14,6 +14,8 @@ import {
   updateNameAddress,
 } from "../features/database/databaseSlice";
 import { updateName } from "../features/auth/authSlice";
+import Navbar from "../components/Navbar";
+import ToggleSwitch from "../components/ToggleSwitch";
 
 function Settings() {
   const { register, handleSubmit } = useForm();
@@ -26,6 +28,7 @@ function Settings() {
 
   const imagePath = useSelector((state) => state.database.userDbData.imagePath);
   const [imageUrl, setImageUrl] = useState("");
+  const lightTheme = useSelector((state) => state.settings.lightTheme);
 
   const uploadImage = async (imageFile) => {
     const url = await storageService.uploadFile({
@@ -84,11 +87,22 @@ function Settings() {
   };
 
   return (
-    <div className="flex w-full h-screen relative bg-[#F7F7F7] items-center flex-col md:flex-row">
+    <div
+      className={`flex w-full h-screen relative ${
+        lightTheme ? "bg-bgLight" : "bg-bgDark"
+      } items-center flex-col md:flex-row`}
+    >
       <Sidebar initialPage={"settings"}></Sidebar>
+      <Navbar initialPage={"settings"}></Navbar>
       <div className="flex-1 h-screen flex overflow-y-auto w-full md:w-full">
         <div className="flex flex-1 h-screen flex-col md:px-12 lg:px-32 px-4 gap-7 pt-10">
-          <h1 className="font-semibold text-2xl">Account information</h1>
+          <h1
+            className={`font-semibold text-2xl ${
+              lightTheme ? "text-black" : "text-white"
+            }`}
+          >
+            Account information
+          </h1>
 
           <div className="flex flex-row gap-10">
             <img
@@ -97,11 +111,15 @@ function Settings() {
               className="h-32 w-32 bg-neutral-700 rounded-3xl object-cover"
             />
             <div className="flex flex-col justify-evenly">
-              <h4 className="font-semibold text-lg text-neutral-500">
-                Profile picture
+              <h4
+                className={`font-bold text-sm ${
+                  lightTheme ? "text-black" : "text-white"
+                }`}
+              >
+                PROFILE PICTURE
               </h4>
               <button
-                className="py-3 px-4 rounded-md bg-primary text-white w-fit items-center flex gap-3 font-medium"
+                className="py-3 md:px-4 px-2 rounded-md bg-primary text-white md:w-fit items-center flex md:gap-3 gap-1 font-medium"
                 onClick={() =>
                   document.getElementById("postImageInput").click()
                 }
@@ -116,6 +134,35 @@ function Settings() {
                   onChange={handleImageChange}
                 />
               </button>
+            </div>
+          </div>
+
+          {/* theme */}
+          <div>
+            <label
+              className={`font-bold text-sm ${
+                lightTheme ? "text-black" : "text-white"
+              }`}
+              htmlFor="themeToggler"
+            >
+              THEME
+            </label>
+            <div className="flex flex-row items-center gap-3">
+              <span
+                className={`${
+                  lightTheme ? "text-neutral-800" : "text-neutral-200"
+                } mt-2`}
+              >
+                Dark
+              </span>
+              <ToggleSwitch />
+              <span
+                className={`${
+                  lightTheme ? "text-neutral-800" : "text-neutral-200"
+                } mt-2`}
+              >
+                Light
+              </span>
             </div>
           </div>
 
