@@ -59,7 +59,7 @@ function Signup() {
         text={"Already have an account?"}
         buttonTxt={"Login"}
       ></AuthHero>
-      <div className={`lg:absolute top-0 right-0 z-50 ${lightTheme ? 'bg-bgLight' : 'bg-bgDark'} w-full lg:w-1/2 h-auto lg:h-screen flex flex-col items-center lg:items-start justify-center px-8 lg:px-24 py-16 rounded-bl-3xl rounded-br-3xl lg:rounded-tl-3xl lg:rounded-bl-3xl`}>
+      <div className={`lg:absolute top-0 right-0 z-40 ${lightTheme ? 'bg-bgLight' : 'bg-bgDark'} w-full lg:w-1/2 h-auto lg:h-screen flex flex-col items-center lg:items-start justify-center px-8 lg:px-24 py-16 rounded-bl-3xl rounded-br-3xl lg:rounded-tl-3xl lg:rounded-bl-3xl`}>
         <Logo></Logo>
 
         <h3 className={`font-bold ${lightTheme ? "text-black" : "text-white"} z-10 text-xl mt-8`}>Welcome</h3>
@@ -112,7 +112,6 @@ function Signup() {
           </Button>
         </form>
 
-        <h3 className={`absolute self-center lg:self-start lg:bottom-5 hidden lg:block ${lightTheme ? 'text-black/50' : 'text-white/50'} font-semibold text-sm`}>MADE WITH ❤️ BY ADITYA SINGH PATEL</h3>
       </div>
     </div>
   );

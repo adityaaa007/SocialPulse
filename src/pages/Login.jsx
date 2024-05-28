@@ -48,7 +48,7 @@ function Login() {
         text={"Don`t have an account yet?"}
         buttonTxt={"Create and account"}
       ></AuthHero>
-      <div className={`lg:absolute top-0 right-0 z-50 ${lightTheme ? 'bg-bgLight' : 'bg-bgDark'} w-full lg:w-1/2 h-auto lg:h-screen flex flex-col items-center lg:items-start justify-center px-8 lg:px-24 py-16`}>
+      <div className={`lg:absolute top-0 right-0 z-40 ${lightTheme ? 'bg-bgLight' : 'bg-bgDark'} w-full lg:w-1/2 h-auto lg:h-screen flex flex-col items-center lg:items-start justify-center px-8 lg:px-24 py-16`}>
         <Logo></Logo>
 
         <h3 className={`font-bold ${lightTheme ? "text-black" : "text-white"} z-10 text-xl mt-8`}>Welcome back</h3>
@@ -88,7 +88,6 @@ function Login() {
           </Button>
         </form>
 
-        <h3 className={`absolute self-center lg:self-start bottom-5 ${lightTheme ? 'text-black/50' : 'text-white/50'} font-semibold text-sm`}>MADE WITH ❤️ BY ADITYA SINGH PATEL</h3>
       </div>
     </div>
   );
