@@ -4,10 +4,12 @@ import FormInput from "./FormInput";
 import Button from "./Button";
 import authService from "../services/authService";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 function AuthForm({ page, buttonTxt }) {
 
   const { register, handleSubmit } = useForm();
+  const lightTheme = useSelector((state) => state.settings.lightTheme);
 
   const clickHandler = () => {
     if(page === 'signup') {
@@ -16,7 +18,7 @@ function AuthForm({ page, buttonTxt }) {
   }
 
   return (
-    <div className="lg:absolute top-0 right-0 z-50 bg-white w-full lg:w-1/2 h-auto lg:h-screen flex flex-col items-center lg:items-start justify-center px-8 lg:px-24 py-16 rounded-bl-3xl rounded-br-3xl lg:rounded-tl-3xl lg:rounded-bl-3xl">
+    <div className={`lg:absolute top-0 right-0 z-50 ${lightTheme ? 'bg-bgLight' : 'bg-bgDark'} w-full lg:w-1/2 h-auto lg:h-screen flex flex-col items-center lg:items-start justify-center px-8 lg:px-24 py-16 rounded-bl-3xl rounded-br-3xl lg:rounded-tl-3xl lg:rounded-bl-3xl`}>
       <img src={logo} alt="" height={90} width={90} />
 
       <h3 className="font-bold text-black z-10 text-xl mt-8">Welcome back</h3>

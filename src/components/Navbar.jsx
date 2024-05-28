@@ -6,10 +6,12 @@ import { LogOut } from "lucide-react";
 import { logout } from "../features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "./Logo";
-import logo from "../assets/dashboard_logo_white.jpg";
+import logo from "../assets/dashboard_logo_white.png";
 import authService from "../services/authService";
 import { removeData } from "../features/database/databaseSlice";
 import { useNavigate } from "react-router-dom";
+import { PanelRightClose, PanelRightOpen } from "lucide-react";
+import LargeSidebar from "./LargeSidebar";
 
 const Navbar = ({ initialPage }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -17,6 +19,8 @@ const Navbar = ({ initialPage }) => {
   const dispatch = useDispatch();
   const name = useSelector((state) => state.auth.userData.name);
   const navigate = useNavigate();
+  const lightTheme = useSelector((state) => state.settings.lightTheme);
+  const [panelOpen, setPanelOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
@@ -30,10 +34,12 @@ const Navbar = ({ initialPage }) => {
     >
       <div className="flex flex-row justify-between items-center w-full">
         <Logo src={logo} className="m-4 self-center"></Logo>
-        <div className="flex justify-center items-center h-16">
+        <div className="flex justify-center items-center h-16 gap-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-neutral-200 cursor-pointer"
+            className={`h-6 w-6 ${
+              lightTheme ? "text-neutral-200" : "text-neutral-700"
+            } cursor-pointer`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -48,24 +54,68 @@ const Navbar = ({ initialPage }) => {
               }
             />
           </svg>
+
+          <PanelRightOpen
+            size={40}
+            color={lightTheme ? "black" : "#404040"}
+            className={`p-2 rounded-full ${panelOpen ? "hidden" : "block"}`}
+            onClick={() => {
+              setPanelOpen(!panelOpen);
+            }}
+          ></PanelRightOpen>
+
+          <PanelRightClose
+            size={40}
+            color={lightTheme ? "black" : "#404040"}
+            className={`p-2 rounded-full ${panelOpen ? "block" : "hidden"}`}
+            onClick={() => {
+              setPanelOpen(!panelOpen);
+            }}
+          ></PanelRightClose>
+          <LargeSidebar hidden={!panelOpen}></LargeSidebar>
         </div>
       </div>
 
       <div className="w-full flex flex-col items-center">
         {/* Sidebar content goes here */}
-        <ul className={`${isExpanded ? "flex" : "hidden"} flex-col gap-5 items-start relative h-auto pb-8 transition-all duration-300`}>
-          <span className="text-white  transition-all duration-300">
-            Hello, <br></br>
-            <span className="font-bold text-white">{name}</span>
+        <ul
+          className={`${
+            isExpanded ? "flex" : "hidden"
+          } flex-col gap-5 items-start relative h-auto pb-8 transition-all duration-300`}
+        >
+          <span
+            className={`text-white ${
+              lightTheme ? "text-white" : "text-black/70"
+            } transition-all duration-300`}
+          >
+            <span
+              className={`font-regular ${
+                lightTheme ? "text-white" : "text-black/70"
+              }`}
+            >
+              Hello,
+            </span>{" "}
+            <br></br>
+            <span
+              className={`font-bold ${
+                lightTheme ? "text-white" : "text-black/70"
+              }`}
+            >
+              {name}
+            </span>
           </span>
           <SidebarItem
             icon={
               <Home
-                color={selected === "home" ? "#666BED" : "white"}
+                color={
+                  selected === "home"
+                    ? "#666BED"
+                    : `${lightTheme ? "white" : "#00000080"}`
+                }
                 size={24}
               />
             }
-            isExpanded={true}
+            isExpanded={isExpanded}
             isSelected={selected === "home"} // Pass isSelected prop based on selected state
             onClick={() => {
               setSelected("home");
@@ -77,11 +127,15 @@ const Navbar = ({ initialPage }) => {
           <SidebarItem
             icon={
               <User
-                color={selected === "profile" ? "#666BED" : "white"}
+                color={
+                  selected === "profile"
+                    ? "#666BED"
+                    : `${lightTheme ? "white" : "#00000080"}`
+                }
                 size={24}
               />
             }
-            isExpanded={true}
+            isExpanded={isExpanded}
             isSelected={selected === "profile"} // Pass isSelected prop based on selected state
             onClick={() => {
               setSelected("profile");
@@ -93,11 +147,15 @@ const Navbar = ({ initialPage }) => {
           <SidebarItem
             icon={
               <Settings
-                color={selected === "settings" ? "#666BED" : "white"}
+                color={
+                  selected === "settings"
+                    ? "#666BED"
+                    : `${lightTheme ? "white" : "#00000080"}`
+                }
                 size={24}
               />
             }
-            isExpanded={true}
+            isExpanded={isExpanded}
             isSelected={selected === "settings"} // Pass isSelected prop based on selected state
             onClick={() => {
               setSelected("settings");
@@ -106,7 +164,6 @@ const Navbar = ({ initialPage }) => {
           >
             Settings
           </SidebarItem>
-
           {/* Logout button */}
           <a
             onClick={async () => {
@@ -115,11 +172,21 @@ const Navbar = ({ initialPage }) => {
               await authService.logout();
             }}
             href="#"
-            className={`flex gap-3 py-[10px] px-[10px] border-2 border-white/50 rounded-lg hover:bg-white/10 w-full justify-start duration-300`}
+            className={`flex gap-3 py-[10px] px-[10px] border-2 ${
+              lightTheme
+                ? "hover:bg-white/10 border-white/50"
+                : "hover:bg-black/10 border-black/20"
+            } rounded-lg  ${
+              isExpanded ? "w-full justify-start" : "w-auto justify-center"
+            } duration-300`}
           >
-            <LogOut color="white" size={24} />
+            <LogOut color={`${lightTheme ? "white" : "#00000080"}`} size={24} />
             <p
-              className={`text-white font-medium text-base block transition-all duration-300`}
+              className={`${
+                lightTheme ? "text-white" : "text-black/70"
+              } font-medium text-base ${
+                isExpanded ? "block" : "hidden"
+              } transition-all duration-300`}
             >
               Logout
             </p>

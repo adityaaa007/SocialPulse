@@ -6,7 +6,8 @@ import { LogOut } from "lucide-react";
 import { logout } from "../features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "./Logo";
-import logo from "../assets/dashboard_logo_white.jpg";
+import logo from "../assets/dashboard_logo_white.png";
+import onlyLogo from '../assets/dashboard_logo_white.jpg'
 import authService from "../services/authService";
 import { removeData } from "../features/database/databaseSlice";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +30,7 @@ const Sidebar = ({initialPage}) => {
         isExpanded ? "w-52" : "w-28"
       } transition-all duration-300 px-8 md:flex hidden flex-col sticky top-0`}
     >
-      <Logo src={logo} className="mt-8 mb-4 self-center"></Logo>
+      <Logo src={isExpanded ? logo : onlyLogo} className="mt-8 mb-4 self-center"></Logo>
       <div className="flex justify-center items-center h-16">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +98,7 @@ const Sidebar = ({initialPage}) => {
 
         {isExpanded && (
           <span className={`text-white ${lightTheme ? 'text-white' : "text-black/70"} absolute bottom-20 transition-all duration-300`}>
-            Hello, <br></br>
+            <span className={`font-regular ${lightTheme ? 'text-white' : "text-black/70"}`}>Hello,</span> <br></br>
             <span className={`font-bold ${lightTheme ? 'text-white' : "text-black/70"}`}>{name}</span>
           </span>
         )}

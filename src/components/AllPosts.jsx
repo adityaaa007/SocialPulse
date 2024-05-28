@@ -15,7 +15,7 @@ function AllPosts({ sharedData, searchText, filter }) {
 
   useEffect(() => {
     const getAllPosts = async () => {
-      console.log("fetching from db...");
+      // console.log("fetching from db...");
       const postDocs = await databaseService.getAllData({
         collectionPath: "posts",
         queryName: "date",

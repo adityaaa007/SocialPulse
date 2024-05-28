@@ -4,7 +4,7 @@ import FormInput from "../components/FormInput.jsx";
 import Button from "../components/Button.jsx";
 import authService from "../services/authService.js";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login as authLogin } from "../features/auth/authSlice.js";
 import { useNavigate } from "react-router-dom";
 import Logo from "../components/Logo.jsx";
@@ -12,6 +12,7 @@ import databaseService from "../services/databaseService.js";
 
 function Signup() {
   const { register, handleSubmit } = useForm();
+  const lightTheme = useSelector(state => state.settings.lightTheme)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -58,10 +59,10 @@ function Signup() {
         text={"Already have an account?"}
         buttonTxt={"Login"}
       ></AuthHero>
-      <div className="lg:absolute top-0 right-0 z-50 bg-white w-full lg:w-1/2 h-auto lg:h-screen flex flex-col items-center lg:items-start justify-center px-8 lg:px-24 py-16 rounded-bl-3xl rounded-br-3xl lg:rounded-tl-3xl lg:rounded-bl-3xl">
+      <div className={`lg:absolute top-0 right-0 z-50 ${lightTheme ? 'bg-bgLight' : 'bg-bgDark'} w-full lg:w-1/2 h-auto lg:h-screen flex flex-col items-center lg:items-start justify-center px-8 lg:px-24 py-16 rounded-bl-3xl rounded-br-3xl lg:rounded-tl-3xl lg:rounded-bl-3xl`}>
         <Logo></Logo>
 
-        <h3 className="font-bold text-black z-10 text-xl mt-8">Welcome</h3>
+        <h3 className={`font-bold ${lightTheme ? "text-black" : "text-white"} z-10 text-xl mt-8`}>Welcome</h3>
 
         <p className="text-neutral-400 mt-1 mb-4">
           Register to create an account
@@ -70,14 +71,14 @@ function Signup() {
         <form onSubmit={handleSubmit(signup)}>
           <FormInput
             label={"NAME"}
-            placeholder={"John Cena"}
+            placeholder={"Black Panther"}
             type={"text"}
             style={"mt-4"}
             {...register("name", { required: true })}
           ></FormInput>
           <FormInput
             label={"ADDRESS"}
-            placeholder={"MP, India"}
+            placeholder={"Wakanda"}
             type={"text"}
             style={"mt-4"}
             {...register("address", { required: true })}
@@ -110,6 +111,8 @@ function Signup() {
             Create an account
           </Button>
         </form>
+
+        <h3 className={`absolute self-center lg:self-start lg:bottom-5 hidden lg:block ${lightTheme ? 'text-black/50' : 'text-white/50'} font-semibold text-sm`}>MADE WITH ❤️ BY ADITYA SINGH PATEL</h3>
       </div>
     </div>
   );

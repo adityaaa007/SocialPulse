@@ -1,7 +1,7 @@
 import "./App.css";
 import { Outlet } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "./features/auth/authSlice.js";
 import { useEffect, useState } from "react";
 import { InfinitySpin } from "react-loader-spinner";
@@ -10,6 +10,7 @@ export default function App() {
   const dispatch = useDispatch();
 
   const [loader, setLoader] = useState(true);
+  const lightTheme = useSelector(state => state.settings.lightTheme)
 
   useEffect(() => {
     const auth = getAuth();
@@ -30,7 +31,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center">
+    <div className={`w-full min-h-screen flex items-center justify-center ${lightTheme ? 'bg-bgLight' : 'bg-bgDark'}`}>
       {loader ? (
         <InfinitySpin
           visible={true}

@@ -22,7 +22,7 @@ class DatabaseService {
 
     try {
       const docRef = await addDoc(this.dbCollection, data);
-      console.log("docRef id : ", docRef.id);
+      // console.log("docRef id : ", docRef.id);
       return docRef.id;
     } catch (e) {
       console.error("uploadData error: ", e);
@@ -72,7 +72,7 @@ class DatabaseService {
     const docRef = doc(db, collectionId, documentId);
 
     const unsubscribe = onSnapshot(docRef, (doc) => {
-      console.log("Document data: ", doc.data());
+      // console.log("Document data: ", doc.data());
       callback(doc.data());
     });
 

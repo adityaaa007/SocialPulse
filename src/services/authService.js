@@ -53,7 +53,7 @@ class AuthService {
     return await signOut(auth)
       .then(() => {
         // Sign-out successful
-        console.log("Signed out successfully");
+        // console.log("Signed out successfully");
         return true;
         // this.dispatch(logout());
       })

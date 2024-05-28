@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import storageService from "../services/storageService";
 import Popupmenu from "./Popupmenu";
-import { Share, Heart, MessageSquare, ImageMinus } from "lucide-react";
+import { Share, Heart, MessageSquare } from "lucide-react";
 import { useSelector } from "react-redux";
 import databaseService from "../services/databaseService";
 import Comment from "./Comment";
@@ -222,7 +222,7 @@ function Post({ data, id }) {
         <img
           src={url}
           alt="post-image"
-          className="rounded-lg object-cover w-full h-64"
+          className="rounded-lg object-cover w-full h-80"
         ></img>
       ) : null}
 

@@ -4,7 +4,7 @@ import databaseService from "../services/databaseService";
 import { Player, Controls } from "@lottiefiles/react-lottie-player";
 import shimmerAnim from "../assets/shimmer_posts.json";
 
-function LargeSidebar() {
+function LargeSidebar({ hidden = true }) {
   const [peopleList, setPeopleList] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,8 +19,12 @@ function LargeSidebar() {
     })();
   }, []);
 
+  useEffect(() => {
+    console.log('hidden: '+hidden);
+  }, [hidden])
+
   return (
-    <div className="bg-[#1E1F21] rounded-tl-3xl rounded-bl-3xl lg:w-[512px] md:w-[380px] h-screen fixed right-0 py-10 px-10 gap-5 hidden md:flex flex-col duration-200 transition-all">
+    <div className={`bg-[#1E1F21] rounded-tl-3xl rounded-bl-3xl lg:w-[512px] md:w-[380px] h-screen fixed right-0 py-10 px-10 gap-5 flex-col duration-200 transition-all z-10`}>
       <h2 className="font-semibold text-white text-xl mb-5">Who to follow</h2>
 
       {loading ? (

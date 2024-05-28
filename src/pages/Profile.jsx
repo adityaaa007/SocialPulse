@@ -20,7 +20,7 @@ function Profile() {
 
   useEffect(() => {
     const getUserPosts = async () => {
-      console.log("fetching userPosts from db...");
+      // console.log("fetching userPosts from db...");
       const postDocs = await databaseService.getUserPosts({ userId: uid });
 
       setLoading(false);
@@ -28,11 +28,11 @@ function Profile() {
       if (postDocs) {
         setPosts(postDocs);
         dispatch(saveUserPosts({ posts: postDocs, userId: uid }));
-        console.log("userPosts: " + postDocs);
+        // console.log("userPosts: " + postDocs);
       }
     };
 
-    console.log(savedPosts + " " + uid);
+    // console.log(savedPosts + " " + uid);
     if (!savedPosts || savedPosts?.length === 0) getUserPosts();
     else {
       setLoading(false);

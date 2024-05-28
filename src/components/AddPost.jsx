@@ -144,7 +144,7 @@ function AddPost({ updateSharedData }) {
       <div className="flex gap-5 items-start relative">
         <img
           src={imageUrl || image}
-          className="h-10 w-10 rounded-xl"
+          className="object-cover h-10 w-10 rounded-xl"
           alt="image"
         />
         <textarea
