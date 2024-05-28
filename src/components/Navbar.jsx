@@ -24,13 +24,14 @@ const Navbar = ({ initialPage }) => {
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
+    setPanelOpen(false);
   };
 
   return (
     <div
       className={`bg-primary text-white h-auto w-full justify-between items-center ${
         isExpanded ? "w-52" : "w-28"
-      } transition-all duration-300 px-8 flex flex-col sticky top-0 md:hidden`}
+      } transition-all duration-300 px-8 flex flex-col sticky top-0 md:hidden z-10`}
     >
       <div className="flex flex-row justify-between items-center w-full">
         <Logo src={logo} className="m-4 self-center"></Logo>
@@ -61,6 +62,7 @@ const Navbar = ({ initialPage }) => {
             className={`p-2 rounded-full ${panelOpen ? "hidden" : "block"}`}
             onClick={() => {
               setPanelOpen(!panelOpen);
+              setIsExpanded(false)
             }}
           ></PanelRightOpen>
 
@@ -70,6 +72,7 @@ const Navbar = ({ initialPage }) => {
             className={`p-2 rounded-full ${panelOpen ? "block" : "hidden"}`}
             onClick={() => {
               setPanelOpen(!panelOpen);
+              setIsExpanded(false)
             }}
           ></PanelRightClose>
           <LargeSidebar hidden={!panelOpen}></LargeSidebar>

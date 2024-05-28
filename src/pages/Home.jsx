@@ -103,7 +103,7 @@ function Home() {
             filter={filter}
           ></AllPosts>
         </div>
-        <LargeSidebar></LargeSidebar>
+        <LargeSidebar hidden={false}></LargeSidebar>
       </div>
     </div>
   );

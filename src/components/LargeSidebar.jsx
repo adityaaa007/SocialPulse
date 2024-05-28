@@ -19,12 +19,8 @@ function LargeSidebar({ hidden = true }) {
     })();
   }, []);
 
-  useEffect(() => {
-    console.log('hidden: '+hidden);
-  }, [hidden])
-
   return (
-    <div className={`bg-[#1E1F21] rounded-tl-3xl rounded-bl-3xl lg:w-[512px] md:w-[380px] h-screen fixed right-0 py-10 px-10 gap-5 flex-col duration-200 transition-all z-10`}>
+    <div className={`bg-[#1E1F21] rounded-tl-3xl rounded-bl-3xl lg:w-[512px] md:w-[380px] h-screen fixed right-0 top-0 mt-[83px] md:mt-0 py-10 px-10 gap-5 flex-col duration-200 transition-all ${hidden ? 'translate-x-full' : 'translate-x-0 z-[-1] md:z-[10] flex'}`}>
       <h2 className="font-semibold text-white text-xl mb-5">Who to follow</h2>
 
       {loading ? (
