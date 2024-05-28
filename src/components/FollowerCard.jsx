@@ -54,7 +54,7 @@ function FollowerCard({ data, id }) {
           <h3 className="text-white font-medium text-base">
             {data.name}
             {userDbData.following.includes(id) && (
-              <span className="py-1 px-2 ms-2 font-base text-green-500 border text-xs rounded-md border-green-400">
+              <span className="md:inline hidden py-1 px-2 ms-2 font-base text-green-500 border text-xs rounded-md border-green-400">
                 Following
               </span>
             )}
